@@ -1,13 +1,10 @@
-# R3F Axe Throwing Game Tutorial (Starter pack)
+# React Three Fiber - Axe Throwing Game
 
-[Video Tutorial](https://www.youtube.com/watch?v=haIWEy6O6rM)
+Simple axe throwing game. Testing VFX.
 
-![Video thumbnail](https://github.com/user-attachments/assets/a6e8e486-b36b-4936-a157-14bb9000ef94)
+[Video](https://www.youtube.com/watch?v=haIWEy6O6rM)
 
-[Demo](https://axe.wawasensei.dev/) - [Final Code](https://github.com/wass08/r3f-axe-throwing-game-final)
-
-
-# Attributions
+## Attributions
 
 [Axe Small by Quaternius](https://poly.pizza/m/o54NXjRI4V)
 
