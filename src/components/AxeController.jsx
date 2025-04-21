@@ -80,8 +80,8 @@ const AxeController = () => {
               directionMax: [1, 1, 1],
               rotationSpeedMin: [0, 0, 0],
               rotationSpeedMax: [0, 0, 0],
-              colorStart: ['#d862b1', '#fcdada', '#577ac2'],
-              colorEnd: ['#d862b1', '#daebfc', '#577ac2'],
+              colorStart: ['#d339a1', '#b493d9', '#446ecc'],
+              colorEnd: ['#d339a1', '#b493d9', '#446ecc'],
               size: [0.01, 1]
             }}
             debug={false}

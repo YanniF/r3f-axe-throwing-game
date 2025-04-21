@@ -1,7 +1,10 @@
-import {useRef, useEffect, useState} from "react";
+import {useRef, useEffect, useState, useCallback} from "react";
 import {useGLTF} from "@react-three/drei";
 import {ConvexHullCollider, RigidBody} from "@react-three/rapier";
 import { balloonMaterials } from "../hooks/useGame";
+import {VFXEmitter} from "wawa-vfx";
+import {useFrame} from "@react-three/fiber";
+import {randFloat} from "three/src/math/MathUtils.js";
 
 const Balloon = ({ position, color }) => {
   const { nodes, materials} = useGLTF("models/balloon_modified.glb")
@@ -22,6 +25,43 @@ const Balloon = ({ position, color }) => {
     }
   }, []);
 
+  useFrame(() => {
+    if (rb.current && !exploded) {
+      const currentPosition = rb.current.translation()
+
+      if (currentPosition.y > 20) {
+        currentPosition.y = randFloat(-20, -5)
+        rb.current.setLinvel({
+          x: 0,
+          y: 0,
+          z: 0,
+        });
+        rb.current.setAngvel({
+          x: 0,
+          y: 0,
+          z: 0,
+        });
+        rb.current.applyTorqueImpulse(
+          {
+            x: Math.random() * 0.05,
+            y: Math.random() * 0.05,
+            z: Math.random() * 0.05,
+          },
+          true
+        )
+
+        rb.current.setTranslation(currentPosition, true)
+      }
+    }
+  })
+
+  // useCallback to avoid the rigid body being created every render
+  const onIntersectionEnter = useCallback((e) => {
+    if (e.other.rigidBodyObject.name === "axe") {
+      setExploded(true)
+    }
+  })
+
   return (
     <RigidBody
       ref={rb}
@@ -32,9 +72,31 @@ const Balloon = ({ position, color }) => {
       linearDamping={.2}
       angularDamping={.2}
       restitution={1}
-      onIntersectionEnter={() => {}}
+      onIntersectionEnter={onIntersectionEnter}
     >
-      <group dispose={null} visible={!exploded} scale={3}>
+      {exploded && (
+        <VFXEmitter
+          emitter="sparks"
+          settings={{
+            loop: false,
+            spawnMode: "burst",
+            nbParticles: 200,
+            duration: 1,
+            size: [0.05, 0.3],
+            startPositionMin: [-0.1, -0.1, -0.1],
+            startPositionMax: [0.1, 0.1, 0.1],
+            rotationSpeedMin: [-1, -1, -10],
+            rotationSpeedMax: [1, 1, 10],
+            directionMin: [-0.1, 0, -0.1],
+            directionMax: [0.1, 0.5, 0.1],
+            speed: [1, 6],
+            colorStart: [color],
+            particlesLifetime: [0.1, 1],
+          }}
+          debug={false}
+        />
+      )}
+      <group visible={!exploded} dispose={null} scale={3}>
         <ConvexHullCollider
           args={[nodes.Balloon.geometry.attributes.position.array]}
         />

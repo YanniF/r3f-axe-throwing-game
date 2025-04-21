@@ -10,6 +10,7 @@ import GradientSky from "./GradientSky";
 import AxeController from "./AxeController.jsx";
 import Target from "./Target.jsx";
 import Balloons from "./Balloons.jsx";
+import Walls from "./Walls.jsx";
 
 const Experience = () => {
   const controls = useRef();
@@ -19,6 +20,7 @@ const Experience = () => {
       <CameraControls ref={controls} />
       <GradientSky />
       <AxeController />
+      <Walls />
       <Balloons />
       <group position-x={20} position-y={-1}>
         <Target />

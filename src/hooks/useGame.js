@@ -21,11 +21,11 @@ export const useGame = create((set, get) => ({
   },
   startGame: () => {
     set({
-      ballons: new Array(50).fill(0).map((_, index) => ({
+      ballons: new Array(60).fill(0).map((_, index) => ({
         id: `ballon_${index}_${Math.random()}`,
         position: new Vector3(
           randFloat(8, 18),
-          randFloat(-20, 0),
+          randFloat(-30, 0),
           randFloatSpread(1)
         ),
         color: balloonColors[randInt(0, balloonColors.length - 1)],
