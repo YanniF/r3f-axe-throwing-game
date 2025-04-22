@@ -4,20 +4,31 @@ import {
   Grid,
   PerspectiveCamera,
 } from "@react-three/drei";
-import { useRef } from "react";
+import {useEffect, useRef} from "react";
 import {VFXParticles} from "wawa-vfx";
 import GradientSky from "./GradientSky";
 import AxeController from "./AxeController.jsx";
 import Target from "./Target.jsx";
 import Balloons from "./Balloons.jsx";
 import Walls from "./Walls.jsx";
+import {useGame} from "../hooks/useGame.js";
 
 const Experience = () => {
-  const controls = useRef();
+  const cameraControls = useRef();
+  const axeLaunched = useGame(state => state.axeLaunched);
+
+  useEffect(() => {
+    if(axeLaunched) {
+      cameraControls.current.setLookAt(10, 0, 30, 10, 0, 0, true)
+    }
+    else {
+      cameraControls.current.setLookAt(-0.1, 0, 0, 0, 0, 0, true)
+    }
+  }, [axeLaunched]);
 
   return (
     <>
-      <CameraControls ref={controls} />
+      <CameraControls ref={cameraControls} />
       <GradientSky />
       <AxeController />
       <Walls />

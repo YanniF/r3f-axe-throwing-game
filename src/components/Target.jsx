@@ -18,7 +18,7 @@ const Target = () => {
   return (
     <RigidBody colliders="hull" type="kinematicPosition" name="target" ref={rb}>
       <Gltf
-        src="models/Ancient Ruins target.glb"
+        src="models/target.glb"
         rotation-y={degToRad(-90)}
         position-x={0}
         scale={3}

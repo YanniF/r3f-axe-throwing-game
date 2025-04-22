@@ -12,10 +12,10 @@ function App() {
       {/* <Stats /> */}
       <UI />
       <Loader />
-      <Canvas shadows camera={{ position: [-0.1, 0, 0], fov: 50 }}>
+      <Canvas shadows camera={{ position: [0, .5, 10], fov: 50 }}>
         <color attach="background" args={["#111"]} />
         <Suspense>
-          <Physics debug colliders={false}>
+          <Physics colliders={false}>
             <Experience />
           </Physics>
         </Suspense>
