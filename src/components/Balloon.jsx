@@ -1,7 +1,7 @@
 import {useRef, useEffect, useState, useCallback} from "react";
 import {useGLTF} from "@react-three/drei";
 import {ConvexHullCollider, RigidBody} from "@react-three/rapier";
-import { balloonMaterials } from "../hooks/useGame";
+import {balloonMaterials, useGame} from "../hooks/useGame";
 import {VFXEmitter} from "wawa-vfx";
 import {useFrame} from "@react-three/fiber";
 import {randFloat} from "three/src/math/MathUtils.js";
@@ -11,6 +11,7 @@ const Balloon = ({ position, color }) => {
 
   const rb = useRef();
   const [exploded, setExploded] = useState(false)
+  const onBalloonHit = useGame(state => state.onBalloonHit)
 
   useEffect(() => {
     if (rb.current) {
@@ -54,6 +55,13 @@ const Balloon = ({ position, color }) => {
       }
     }
   })
+
+  // adding to a separate useEffect to avoid couting multiple collisions
+  useEffect(() => {
+    if (exploded) {
+      onBalloonHit()
+    }
+  }, [exploded])
 
   // useCallback to avoid the rigid body being created every render
   const onIntersectionEnter = useCallback((e) => {

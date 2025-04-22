@@ -12,6 +12,7 @@ const AxeController = () => {
 
   const axeLaunched = useGame((state) => state.axeLaunched)
   const launchAxe = useGame((state) => state.launchAxe)
+  const onTargetHit = useGame((state) => state.onTargetHit)
 
   useEffect(() => {
     const onPointerUp = () => launchAxe()
@@ -31,6 +32,12 @@ const AxeController = () => {
       setImpact(false)
     }
   }, [axeLaunched])
+
+  useEffect(() => {
+    if(impact) {
+      onTargetHit()
+    }
+  }, [impact])
 
   useFrame(({pointer}) => {
     if (rigidBody.current && !axeLaunched) {
@@ -97,6 +104,32 @@ const AxeController = () => {
         onIntersectionEnter={e => collisionEnterHandler(e)}
       >
         <Gltf src="models/Axe Small.glb" position-y={-.3}/>
+
+        {axeLaunched && !impact && (
+          <group>
+            <VFXEmitter
+              position-y={-0.3}
+              emitter="axes"
+              settings={{
+                spawnMode: "time",
+                loop: true,
+                nbParticles: 50,
+                particlesLifetime: [1, 1],
+                duration: 0.5,
+                size: [1, 1],
+                startPositionMin: [0, 0, 0],
+                startPositionMax: [0, 0, 0],
+                directionMin: [0, 0, 0],
+                directionMax: [0, 0, 0],
+                startRotationMin: [0, 0, 0],
+                startRotationMax: [0, 0, 0],
+                speed: [0.1, 2],
+                colorStart: ["#37374c"],
+              }}
+              debug={false}
+            />
+          </group>
+        )}
       </RigidBody>
     </>
   )

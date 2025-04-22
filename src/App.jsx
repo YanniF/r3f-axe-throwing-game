@@ -9,7 +9,6 @@ import UI from "./components/UI";
 function App() {
   return (
     <>
-      {/* <Stats /> */}
       <UI />
       <Loader />
       <Canvas shadows camera={{ position: [0, .5, 10], fov: 50 }}>
@@ -40,10 +39,10 @@ const Preloader = () => {
   ));
 };
 
-useGLTF.preload("models/balloon_modified.glb");
-useGLTF.preload("models/Axe Small Applied.glb");
-useGLTF.preload("models/Axe Small.glb");
-useGLTF.preload("models/AncientRuins-v1.glb");
-useGLTF.preload("models/Ancient Ruins target.glb");
+useGLTF.preload("models/balloon_modified.glb")
+useGLTF.preload("models/Axe Small Applied.glb")
+useGLTF.preload("models/Axe Small.glb")
+useGLTF.preload("models/AncientRuins-v1.glb")
+useGLTF.preload("models/Ancient Ruins target.glb")
 
-export default App;
+export default App

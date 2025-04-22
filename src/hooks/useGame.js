@@ -11,17 +11,31 @@ balloonColors.forEach(color => {
 
 export const useGame = create((set, get) => ({
   axeLaunched: false,
-  ballons: [],
+  balloons: [],
+  firstGame: true,
+  targetHit: 0,
+  balloonsHit: 0,
+  throws: 0,
   launchAxe: () => {
-    set({ axeLaunched: true });
+    console.log('launch axe')
+    if (get().axeLaunched || get().throws <= 0) {
+      return
+    }
+
+    set({axeLaunched: true, throws: get().throws - 1})
 
     setTimeout(() => {
-      set({ axeLaunched: false });
+      set({axeLaunched: false})
     }, 2000)
   },
   startGame: () => {
     set({
-      ballons: new Array(60).fill(0).map((_, index) => ({
+      firstGame: false,
+      axeLaunched: false,
+      targetHit: 0,
+      balloonsHit: 0,
+      throws: 5,
+      balloons: new Array(60).fill(0).map((_, index) => ({
         id: `ballon_${index}_${Math.random()}`,
         position: new Vector3(
           randFloat(8, 18),
@@ -31,5 +45,15 @@ export const useGame = create((set, get) => ({
         color: balloonColors[randInt(0, balloonColors.length - 1)],
       }))
     })
+  },
+  onTargetHit: () => {
+    set(state => ({
+      targetHit: state.targetHit + 1
+    }))
+  },
+  onBalloonHit: () => {
+    set(state => ({
+      balloonsHit: state.balloonsHit + 1
+    }))
   }
 }))
