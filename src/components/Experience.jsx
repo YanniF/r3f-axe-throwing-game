@@ -15,29 +15,42 @@ import Walls from "./Walls.jsx";
 import {useGame} from "../hooks/useGame.js";
 
 const Experience = () => {
-  const { nodes } = useGLTF('models/Axe Small Applied.glb');
+  const {nodes} = useGLTF('models/Axe Small Applied.glb');
 
   const cameraControls = useRef();
+
   const axeLaunched = useGame(state => state.axeLaunched);
+  const firstGame = useGame(state => state.firstGame);
+  const throws = useGame(state => state.throws);
 
   useEffect(() => {
-    if(axeLaunched) {
-      cameraControls.current.setLookAt(10, 0, 30, 10, 0, 0, true)
-    }
-    else {
+    if (firstGame) {
+      cameraControls.current.setLookAt(-15, -5, 20, 10, 0, 0, true)
+    } else if (axeLaunched || throws === 0) {
+      if (window.innerWidth < 1024) {
+        cameraControls.current.setLookAt(-10, 10, 40, 10, 0, 0, true)
+      }
+      else {
+        cameraControls.current.setLookAt(10, 0, 30, 10, 0, 0, true)
+      }
+    } else {
       cameraControls.current.setLookAt(-0.1, 0, 0, 0, 0, 0, true)
     }
-  }, [axeLaunched]);
+  }, [axeLaunched, firstGame, throws]);
 
   return (
     <>
-      <CameraControls ref={cameraControls} />
-      <GradientSky />
-      <AxeController />
-      <Walls />
-      <Balloons />
+      <CameraControls
+        ref={cameraControls}
+        mouseButtons={{left: 0, middle: 0, right: 0}}
+        touches={{one: 0, two: 0, three: 0}}
+      />
+      <GradientSky/>
+      <AxeController/>
+      <Walls/>
+      <Balloons/>
       <group position-x={20} position-y={-1}>
-        <Target />
+        <Target/>
       </group>
       <Gltf
         src="models/AncientRuins-v1.glb"
@@ -85,7 +98,7 @@ const Experience = () => {
 
       <VFXParticles
         name="stars"
-        geometry={<circleGeometry args={[0.2, 20]} />}
+        geometry={<circleGeometry args={[0.2, 20]}/>}
         settings={{
           fadeAlpha: [0.5, 0.5],
           fadeSize: [0.5, 0.5],
@@ -121,7 +134,7 @@ const Experience = () => {
 
       <VFXParticles
         name="axes"
-        geometry={<primitive object={nodes.Axe_small.geometry} />}
+        geometry={<primitive object={nodes.Axe_small.geometry}/>}
         settings={{
           fadeAlpha: [0, 0],
           fadeSize: [0, 1],
@@ -131,7 +144,7 @@ const Experience = () => {
         }}
       />
 
-      <Environment preset="sunset" environmentIntensity={0.3} />
+      <Environment preset="sunset" environmentIntensity={0.3}/>
     </>
   );
 };

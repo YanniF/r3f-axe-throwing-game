@@ -17,7 +17,6 @@ export const useGame = create((set, get) => ({
   balloonsHit: 0,
   throws: 0,
   launchAxe: () => {
-    console.log('launch axe')
     if (get().axeLaunched || get().throws <= 0) {
       return
     }

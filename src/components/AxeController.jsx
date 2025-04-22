@@ -1,12 +1,15 @@
-import {Gltf} from "@react-three/drei";
+import {Gltf, PositionalAudio} from "@react-three/drei";
 import {quat, RigidBody} from "@react-three/rapier";
 import {useGame} from "../hooks/useGame.js";
 import {useEffect, useRef, useState} from "react";
 import {useFrame} from "@react-three/fiber";
 import {VFXEmitter} from "wawa-vfx";
+import {AUDIOS} from "../App.jsx";
 
-const AxeController = () => {
+const AxeController = ({ ...props }) => {
   const rigidBody = useRef()
+  const sfxThrow = useRef()
+  const sfxHit = useRef()
 
   const [impact, setImpact] = useState(undefined)
 
@@ -27,6 +30,8 @@ const AxeController = () => {
       rigidBody.current.setBodyType(0) // 0 = dynamic
       rigidBody.current.applyImpulse({x: 1, y: .5, z: 0}, true)
       rigidBody.current.applyTorqueImpulse({x: 0, y: 0, z: -.2}, true)
+
+      sfxThrow.current.play()
     }
     else {
       setImpact(false)
@@ -62,11 +67,21 @@ const AxeController = () => {
       rigidBody.current.setAngvel({x: 0, y: 0, z: 0})
 
       setImpact(rigidBody.current.translation())
+
+      sfxHit.current.stop()
+      sfxHit.current.play()
     }
   }
 
   return (
-    <>
+    <group {...props}>
+      <PositionalAudio
+        url={AUDIOS.impact}
+        autoplay={false}
+        ref={sfxHit}
+        loop={false}
+        distance={8}
+      />
       {impact && (
         <group position={[impact.x, impact.y, impact.z]}>
           <VFXEmitter
@@ -103,6 +118,13 @@ const AxeController = () => {
         sensor={true}
         onIntersectionEnter={e => collisionEnterHandler(e)}
       >
+        <PositionalAudio
+          ref={sfxThrow}
+          autoplay={false}
+          url={AUDIOS.throw}
+          loop={false}
+          distance={50}
+        />
         <Gltf src="models/Axe Small.glb" position-y={-.3}/>
 
         {axeLaunched && !impact && (
@@ -131,7 +153,7 @@ const AxeController = () => {
           </group>
         )}
       </RigidBody>
-    </>
+    </group>
   )
 }
 

@@ -1,10 +1,11 @@
 import {useRef, useEffect, useState, useCallback} from "react";
-import {useGLTF} from "@react-three/drei";
+import {PositionalAudio, useGLTF} from "@react-three/drei";
 import {ConvexHullCollider, RigidBody} from "@react-three/rapier";
 import {balloonMaterials, useGame} from "../hooks/useGame";
 import {VFXEmitter} from "wawa-vfx";
 import {useFrame} from "@react-three/fiber";
 import {randFloat} from "three/src/math/MathUtils.js";
+import {AUDIOS} from "../App.jsx";
 
 const Balloon = ({ position, color }) => {
   const { nodes, materials} = useGLTF("models/balloon_modified.glb")
@@ -56,7 +57,7 @@ const Balloon = ({ position, color }) => {
     }
   })
 
-  // adding to a separate useEffect to avoid couting multiple collisions
+  // adding to a separate useEffect to avoid counting multiple collisions
   useEffect(() => {
     if (exploded) {
       onBalloonHit()
@@ -83,26 +84,34 @@ const Balloon = ({ position, color }) => {
       onIntersectionEnter={onIntersectionEnter}
     >
       {exploded && (
-        <VFXEmitter
-          emitter="sparks"
-          settings={{
-            loop: false,
-            spawnMode: "burst",
-            nbParticles: 200,
-            duration: 1,
-            size: [0.05, 0.3],
-            startPositionMin: [-0.1, -0.1, -0.1],
-            startPositionMax: [0.1, 0.1, 0.1],
-            rotationSpeedMin: [-1, -1, -10],
-            rotationSpeedMax: [1, 1, 10],
-            directionMin: [-0.1, 0, -0.1],
-            directionMax: [0.1, 0.5, 0.1],
-            speed: [1, 6],
-            colorStart: [color],
-            particlesLifetime: [0.1, 1],
-          }}
-          debug={false}
-        />
+        <>
+          <PositionalAudio
+            url={AUDIOS.pop}
+            autoplay={true}
+            loop={false}
+            distance={10}
+          />
+          <VFXEmitter
+            emitter="sparks"
+            settings={{
+              loop: false,
+              spawnMode: "burst",
+              nbParticles: 180,
+              duration: 1,
+              size: [0.05, 0.3],
+              startPositionMin: [-0.1, -0.1, -0.1],
+              startPositionMax: [0.1, 0.1, 0.1],
+              rotationSpeedMin: [-1, -1, -10],
+              rotationSpeedMax: [1, 1, 10],
+              directionMin: [-0.1, 0, -0.1],
+              directionMax: [0.1, 0.5, 0.1],
+              speed: [1, 6],
+              colorStart: [color],
+              particlesLifetime: [0.1, 1],
+            }}
+            debug={false}
+          />
+        </>
       )}
       <group visible={!exploded} dispose={null} scale={3}>
         <ConvexHullCollider
