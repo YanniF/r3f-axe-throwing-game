@@ -2,6 +2,8 @@
 
 Simple axe throwing game. Testing VFX.
 
+[Live here](https://r3f-axe-throwing-game.vercel.app/)
+
 [Video](https://www.youtube.com/watch?v=haIWEy6O6rM)
 
 ## Attributions
